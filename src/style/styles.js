@@ -1,15 +1,17 @@
 import {StyleSheet, Dimensions} from "react-native";
 
-const w = Dimensions.get('window').width;
-const h = Dimensions.get('window').height;
 
 export default StyleSheet.create({
     container:{
-        flex:1
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        backgroundColor: 'black',
     },
     camera:{
-        width:w,
-        height:h,
-        position:'absolute'
+        width: '100%',
+        height: '100%',
+        borderWidth:2,
+        borderColor: 'white',
     }
 })
