@@ -1,17 +1,47 @@
-import {StyleSheet, Dimensions} from "react-native";
+import {StyleSheet} from "react-native";
+
 
 
 export default StyleSheet.create({
-    container:{
+    container: {
         flex: 1,
-        display: 'flex',
-        flexDirection: 'column',
-        backgroundColor: 'black',
     },
     camera:{
-        width: '100%',
-        height: '100%',
-        borderWidth:2,
-        borderColor: 'white',
+        flex:1,
+    },
+    iconStyle:{
+        width:45,
+        height:45,
+        marginTop:25
+    },
+    startIcon:{
+        width:75,
+        height:75
+    },
+    iconsContainer:{
+        position:'absolute',
+        bottom:0,
+        flexDirection:'row',
+        backgroundColor:'rgba(123, 15, 166,0.5)',
+        padding:15,
+        borderTopEndRadius:150,
+        borderTopStartRadius:150,
+        width:'100%',
+        justifyContent:'space-around'
+    },
+    flashContainer:{
+        flexDirection:'row',
+        justifyContent:'space-between'
+    },
+    flashStyle:{
+        width:50,
+        height:50,
+        margin:25  
+    },
+    cameraTypeIcon:{
+        width:60,
+        height:60,
+        margin:20
     }
+     
 })
