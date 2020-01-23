@@ -8,10 +8,11 @@ class Home extends PureComponent {
     constructor(props){
         super(props);
         this.state={
-            selectType: true,
+            selectType: false,
             type: 'back',
             play: true,
-            flash:'auto'
+            flash:'auto',
+            lastFoto: null,
         };
     }
     changeSelectType = () => {
@@ -35,30 +36,48 @@ class Home extends PureComponent {
           this.setState({flash:v})
         } 
     }
-    changeCameraType = (v) => {
-
+    changeCameraType = () => {
+      if(this.state.type === 'back'){
+        this.setState({type:'front'})
+      }
+      if(this.state.type === 'front'){
+      this.setState({type:'back'})
+      }
     }
+  
     render() {
       return (
         <View style={styles.container}>
           <RNCamera
+            ref={ref => (this.camera = ref)}
             style={styles.camera}
             flashMode={this.state.flash}
             type={this.state.type}
+            androidCameraPermissionOptions={{
+              title: 'Permission to use camera',
+              message: 'We need your permission to use your camera',
+              buttonPositive: 'Ok',
+              buttonNegative: 'Cancel',
+            }}
+            androidRecordAudioPermissionOptions={{
+              title: 'Permission to use audio recording',
+              message: 'We need your permission to use your audio',
+              buttonPositive: 'Ok',
+              buttonNegative: 'Cancel',
+            }}
           >
             <View style={styles.flashContainer}>
-              <TouchableOpacity><Image style={styles.cameraTypeIcon} source={require('../images/cameraTypeIcon.png')}/></TouchableOpacity>
+              <TouchableOpacity onPress={()=>this.changeCameraType()}><Image style={styles.cameraTypeIcon} source={require('../images/cameraTypeIcon.png')}/></TouchableOpacity>
               {this.state.flash === 'auto' && <TouchableOpacity  onPress={()=>this.changeFlashState('on')}><Image style={styles.flashStyle} source={require('../images/flashAutoIcon.png')}/></TouchableOpacity>}
               {this.state.flash === 'on' && <TouchableOpacity onPress={()=>this.changeFlashState('off')}><Image style={styles.flashStyle} source={require('../images/flashOnIcon.png')}/></TouchableOpacity>}
               {this.state.flash === 'off' && <TouchableOpacity onPress={()=>this.changeFlashState('auto')}><Image style={styles.flashStyle} source={require('../images/flashOffIcon.png')}/></TouchableOpacity>}
             </View>
 
             <View style={styles.iconsContainer}>
-                <View style={{width:50,height:50,borderRadius:100,backgroundColor:'white'}}>
-                     
+                <View>
+                  <Image style={styles.lastFoto} />
                 </View>
                 <View>
-
                   <TouchableOpacity>
                     {this.state.selectType == false && <Image style={styles.startIcon} source={require('../images/cameraButtonIcon.png')}/>}
                   </TouchableOpacity>

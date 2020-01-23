@@ -42,6 +42,12 @@ export default StyleSheet.create({
         width:60,
         height:60,
         margin:20
-    }
-     
+    },
+    lastFoto:{
+        width:60,
+        height:60,
+        borderRadius:100,
+        backgroundColor:'green',
+        marginTop:10
+    }  
 })
