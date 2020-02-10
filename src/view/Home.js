@@ -1,6 +1,8 @@
 import React, {PureComponent} from "react";
-import { AppRegistry, View, Image,Text, TouchableOpacity,} from "react-native";
+import { AppRegistry, View, Image, TouchableOpacity,Platform, ToastAndroid, PermissionsAndroid} from "react-native";
 import { RNCamera } from 'react-native-camera';
+import CameraRoll from '@react-native-community/cameraroll'
+
 import styles from "../style/styles";
 
 
@@ -44,15 +46,63 @@ class Home extends PureComponent {
       this.setState({type:'back'})
       }
     }
+    
+    izinKontrol = async () => { 
+  
+      try {
+        const sonuc1 = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+          {
+            title: 'Dosya Okuma İzni',
+            message: 'Uygulama bu izne ihtiyaç duyuyor.',
+            buttonNeutral: 'Daha Sonra Sor',
+            buttonNegative: 'İptal',
+            buttonPositive: 'İzin Ver',
+          },
+        );
+  
+  
+        const sonuc2 = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+          {
+            title: 'Dosya Yazma İzni',
+            message: 'Uygulama bu izne ihtiyaç duyuyor.',
+            buttonNeutral: 'Daha Sonra Sor',
+            buttonNegative: 'İptal',
+            buttonPositive: 'İzin Ver',
+          },
+        );
+  
+  
+        if ((sonuc1 === PermissionsAndroid.RESULTS.GRANTED) && (sonuc2 === PermissionsAndroid.RESULTS.GRANTED)) console.log('İZİN VERİLDİ');
+        else console.log('İZİN VERİLMEDİ');
+      }
+      catch (err) { console.warn(err); }
+    }
+      
+    anaButon = async () => {
+      
+      await this.izinKontrol();
+     
+      if (this.camera) {
+        const options = { quality: 1, base64: false, doNotSave: false };
+        const data = await this.camera.takePictureAsync(options);
+        CameraRoll.saveToCameraRoll(data.uri, 'photo')
+          .then(() => {
+            ToastAndroid.show('OKEY', ToastAndroid.LONG);           
+          })
+          .catch(e => console.log(e));
+      }
+    };
   
     render() {
       return (
         <View style={styles.container}>
           <RNCamera
-            ref={ref => (this.camera = ref)}
+            ref={ref => {this.camera = ref}}
             style={styles.camera}
-            flashMode={this.state.flash}
-            type={this.state.type}
+            type={RNCamera.Constants.Type.back}
+            flashMode={RNCamera.Constants.FlashMode.auto}
             androidCameraPermissionOptions={{
               title: 'Permission to use camera',
               message: 'We need your permission to use your camera',
@@ -78,7 +128,7 @@ class Home extends PureComponent {
                   <Image style={styles.lastFoto} />
                 </View>
                 <View>
-                  <TouchableOpacity>
+                  <TouchableOpacity onPress={() => this.anaButon()}>
                     {this.state.selectType == false && <Image style={styles.startIcon} source={require('../images/cameraButtonIcon.png')}/>}
                   </TouchableOpacity>
 
@@ -107,6 +157,5 @@ class Home extends PureComponent {
     }
   
 }
-  
-  AppRegistry.registerComponent('Home', () => ExampleApp);
+
 export default Home;
