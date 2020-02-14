@@ -1,7 +1,5 @@
 import {StyleSheet} from "react-native";
 
-
-
 export default StyleSheet.create({
     container: {
         flex: 1,
@@ -15,17 +13,17 @@ export default StyleSheet.create({
         marginTop:25
     },
     startIcon:{
-        width:75,
-        height:75
+        width:90,
+        height:90
     },
     iconsContainer:{
         position:'absolute',
         bottom:0,
         flexDirection:'row',
         backgroundColor:'rgba(123, 15, 166,0.5)',
-        padding:15,
-        borderTopEndRadius:150,
-        borderTopStartRadius:150,
+        padding:10,
+        borderTopEndRadius:130,
+        borderTopStartRadius:130,
         width:'100%',
         justifyContent:'space-around'
     },
@@ -34,13 +32,13 @@ export default StyleSheet.create({
         justifyContent:'space-between'
     },
     flashStyle:{
-        width:50,
-        height:50,
+        width:40,
+        height:40,
         margin:25  
     },
     cameraTypeIcon:{
-        width:60,
-        height:60,
+        width:50,
+        height:50,
         margin:20
     },
     lastFoto:{
