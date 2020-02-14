@@ -45,7 +45,13 @@ export default StyleSheet.create({
         width:60,
         height:60,
         borderRadius:100,
-        backgroundColor:'green',
-        marginTop:10
-    }  
+        marginTop:20,
+        borderWidth:1,
+        borderColor:'white'
+    },  
+    nullFoto:{
+        width:60,
+        height:60,
+        marginTop:20
+    }
 })
