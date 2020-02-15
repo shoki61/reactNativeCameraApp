@@ -2,14 +2,15 @@ import React, {PureComponent} from "react";
 import {View, Image, TouchableOpacity, PermissionsAndroid} from "react-native";
 import { RNCamera } from 'react-native-camera';
 import CameraRoll from '@react-native-community/cameraroll';
+import ImagePicker from 'react-native-image-picker';
 
 import styles from "../style/styles";
 
 
 class Home extends PureComponent {
-   componentWillMount = async () => {
+    componentWillMount = async () => {
 		  await this.getLastFoto();
-   }
+    }
     constructor(props){
         super(props);
         this.state={
@@ -85,7 +86,7 @@ class Home extends PureComponent {
       
     takePicture = async () => {
       await this.permissionControll();
-      await this.componentWillMount();
+      this.getLastFoto();
       if (this.camera){
         const options = { quality: 1, base64: true, doNotSave: false, };
         const data = await this.camera.takePictureAsync(options);
@@ -102,7 +103,31 @@ class Home extends PureComponent {
       
       this.setState({ lastFoto: (await CameraRoll.getPhotos({ assetType: 'All', first: 1 })).edges[0].node.image.uri });
     }
-      
+    launchImageLibrary = () => {
+      let options = {
+        storageOptions: {
+          skipBackup: true,
+          path: 'images',
+        },
+      };
+      ImagePicker.launchImageLibrary(options, (response) => {
+        console.log('Response = ', response);
+  
+        if (response.didCancel) {
+          console.log('User cancelled image picker');
+        } else if (response.error) {
+          console.log('ImagePicker Error: ', response.error);
+        } else if (response.customButton) {
+          console.log('User tapped custom button: ', response.customButton);
+          alert(response.customButton);
+        } else {
+          console.log('response', JSON.stringify(response));
+         
+        }
+       
+      });
+  
+    } 
   
     render() {
       return (
@@ -134,10 +159,12 @@ class Home extends PureComponent {
 
             <View style={styles.iconsContainer}>
                 <View>
-                  {this.state.lastFoto ? 
-                   (<Image style={styles.lastFoto} source={{ uri: this.state.lastFoto }} />):
-                   (<Image style={styles.nullFoto} source={require('../images/nullImage.png')} />)
-                  }
+                  <TouchableOpacity onPress={()=>this.launchImageLibrary()}>
+                   {this.state.lastFoto ? 
+                    (<Image style={styles.lastFoto} source={{ uri: this.state.lastFoto }} />):
+                    (<Image style={styles.nullFoto} source={require('../images/nullImage.png')} />)
+                   }
+                  </TouchableOpacity>
                 </View>
                 <View>
                   <TouchableOpacity onPress={() => this.takePicture()}>
